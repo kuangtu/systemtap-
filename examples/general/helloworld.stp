@@ -1,2 +1,7 @@
 #!/usr/bin/stap
+
+# probe探测定义
+# oenshot 为探测点事件
+# {}中的语句是该探测点事件发生时，需要执行的语句
+# println 和C语言类似，为输出字符串
 probe oneshot { println("hello world") }

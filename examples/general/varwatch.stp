@@ -1,14 +1,23 @@
 #!/usr/bin/stap
 
+# 全局变量
 global var%, varerr
 
 probe $1 {
+  # @#defined 检查$2 是否可用（脚本运行时是否传入了参数）
   if (@defined($2)) {
      try {
+        # $2赋值给newvar
          newvar = $2;
+        # var为关联数组，如果当前线程的tid不等于newvar
+        # execname()打印当前的执行名称
+        # tid() 线程id
+        # pp() 线程的函数
+        # @2 第二个参数作为字面量（对于$2和@2的差别参见）
          if (var[tid()] != newvar) {
             printf("%s[%d] %s %s:\n", execname(), tid(), pp(), @2);
             println(newvar);
+            # 将变量放入到线程数组中
             var[tid()] = newvar;
          }
      } catch { varerr ++ }  # error during $2 resolution or perhaps var[] assignment

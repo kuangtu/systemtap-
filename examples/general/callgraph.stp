@@ -1,7 +1,12 @@
 #!/usr/bin/stap
 
+#跟踪函数调用栈
 function trace(entry_p)
 {
+# 打印三个字符串
+# thread_indent(param) 缩进参数
+# 缩进几个空格，根据缩进的前后打印->和<-
+#ppfunc() 放置该探针的函数名，函数名是通过$1传入的
   printf("%s%s%s\n",
          thread_indent (entry_p),
          (entry_p>0?"->":"<-"),
