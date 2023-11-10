@@ -9,6 +9,7 @@ global follow_fork = 0   /* -Gfollow_fork=1 means trace descendant processes too
 global timestamp = 1     /* -Gtimestamp=0 means don't print a syscall timestamp */
 global elapsed_time = 0  /* -Gelapsed_time=1 means print a syscall duration too */
 
+//元素超过了数组默认的容量，可以被覆盖
 global thread_argstr%
 global thread_time%
 
