@@ -1,11 +1,14 @@
 #!/usr/bin/stap
 
+//全局变量
 global packets
 
 // Set up the metrics
 probe begin
 {
   // Set the prefix to be used instead of the module name (optional).
+  
+  //通过tapset查找匹配的函数
   json_set_prefix("netfilter")
 
   // Add the metrics
@@ -25,6 +28,8 @@ probe netfilter.ipv4.pre_routing {
 
 probe json_data
 {
+  //调用宏定义
+  // @宏定义名称
   @json_output_data_start
 
   foreach ([saddr, daddr] in packets-) {

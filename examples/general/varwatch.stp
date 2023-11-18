@@ -6,6 +6,7 @@ global var%, varerr
 probe $1 {
   # @#defined 检查$2 是否可用（脚本运行时是否传入了参数）
   if (@defined($2)) {
+    # 通过try/catch 捕获运行错误
      try {
         # $2赋值给newvar
          newvar = $2;
@@ -25,5 +26,6 @@ probe $1 {
 }
 
 probe error,end {
+  # 如果有错误，则打印信息
   if (varerr) printf("%s %s access errors: %d", @1, @2, varerr);
 }
