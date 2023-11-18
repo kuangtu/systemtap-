@@ -9,6 +9,8 @@ global tot_intervals, sec_counter
 // -G show=#
 // -G interval=#
 // -G clear_screen=[y|n]
+
+// 定义全局变量
 global sort="stime", sortdir="decrease", show=25, interval=5, clear_screen="n"
 
 probe scheduler.ctxswitch {
@@ -29,10 +31,12 @@ probe scheduler.ctxswitch {
     proc_state[prev_pid] = prevtsk_state
 }
 
+// 设置进程的退出状态为65
 probe scheduler.process_exit {
   proc_state[pid] = 65
 }
 
+// 根据进程ID打印状态
 function print_pid_info (proc_pid){
     // calc the state of the process
     if (proc_state[proc_pid] == 0) state = "R"
@@ -55,9 +59,11 @@ function print_pid_info (proc_pid){
            utime[proc_pid])
 }
 
+// 打印统计信息
 function print_info (){
   tot_processes = 0;
 
+  // 遍历数组，累加进程数目
   // count the number of processes
   foreach ([a] in processes)
     tot_processes ++;
@@ -74,6 +80,8 @@ function print_info (){
   printf("%8s %20s %10s %12s %12s %12s %16s %16s\n",
          "PID", "Process", "State", "VirtMem", "RSSMem", "ShrdMem", "CPU Time", "User Time")
 
+  //按照指标、顺序排序
+  // limit 限定数目show
   if (sortdir == "increase") {
     if (sort == "pid") foreach ([proc_pid+] in processes limit show) print_pid_info(proc_pid)
     if (sort == "process") foreach ([proc_pid] in processes+ limit show) print_pid_info(proc_pid)
@@ -99,7 +107,10 @@ function print_info (){
     println("-----------------------------------------------------------------------------------------------------------------")
 }
 
+// 探针事件，按照定时机制每秒执行，实际每5秒执行一次print_info
 probe timer.s(1) {
+  // 如果等于配置的interval 则执行 print_info()
+  // 然后重置sec_counter
   if (++sec_counter >= interval){
     tot_intervals++
     print_info()

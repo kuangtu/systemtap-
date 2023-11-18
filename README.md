@@ -18,6 +18,33 @@
 该脚本放置了一组探测器（由 $1 指定），每个探测器监视某个上下文 $variable 表达式（由 $2 指定）的状态。每当值发生变化时，就会跟踪活动线程的事件。
 
 
+## process/proctop.stp - Periodically Print Process Information With History
+
+每5秒钟，打印出25个占用系统时间最长的进程的列表，并提供有关这些进程的信息。
+
+
+
+
+# tapeset
+示例中包含了tapset库，对于主要的库进行说明。
+
+## scheduler.stp
+
+```
+probe scheduler.process_exit =
+        __scheduler.process_exit.tp !,
+        __scheduler.process_exit.kp
+{
+        name = "process_exit"
+}
+```
+
+`process_exit`方法执行了了`process_exit.tp`，监测内核函数`kernel.trace("sched_process_exit")`。
+
+
+
+
+
 
 
 
