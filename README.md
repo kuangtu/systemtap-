@@ -23,6 +23,9 @@
 每5秒钟，打印出25个占用系统时间最长的进程的列表，并提供有关这些进程的信息。
 
 
+## profiling/fntimes.stp - Show Functions Taking Longer Than Usual
+
+fntimes.stp脚本监控给定函数族（假定非递归）的执行时间历史记录。然后，每次（在预热间隔之后）与历史最大值进行比较。如果超过某个阈值（250%），则打印一条消息
 
 
 # tapeset
