@@ -1,19 +1,26 @@
 #!/usr/bin/stap
 
+// 全局变量 packets
 global packets
 
 probe begin {
       print ("Collecting data... Type Ctrl-C to exit and display results.")
 }
 
+// 查找tapset中netfilter
 probe netfilter.ipv4.pre_routing {
       // Using aggregates avoids contention from packets being sent in
       // parallel from different processors:
+      // packets为关联数组，可以最多指定9个索引表达式
+      // 以saddr、和addr为索引
+      // <<< 汇聚操作符
       packets[saddr, daddr] <<< length
 }
 
 probe end {
       print ("\n")
+      //通过saddr、daddr遍历packets数组
+      //packet- 负号”-“表示降序访问
       foreach ([saddr, daddr] in packets-) {
               printf ("%15s --> %15s : %d packets, %d total bytes\n",
                       saddr, daddr,
