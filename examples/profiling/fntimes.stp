@@ -5,19 +5,27 @@
 
 global mincount = 100      # training: beneath this number of hits, only collect data
 global note_percent = 250  # percent beyond maximum-so-far to generate report for
+# 时间函数，返回微妙
 function time() { return gettimeofday_us() }    # time measurement function
 
 global times
 
 function check(t)   # t: elapsed time
 {
+   # @count 聚合中的样本数目，ppfunc()放置探针的函数名
+   # 如果times[ppfunc()]该函数执行的次数大于mincount
    if (@count(times[ppfunc()]) >= mincount
+   # 如果时间t大于 历史最高值的250%，则打印信息
        && t >= @max(times[ppfunc()]) * note_percent / 100) {   # also consider @avg()
+	   # 最大的时间，方差
      printf("function %s well over %s time (%d vs %d), duration variance %d s^2\n",
             ppfunc(), "maximum", t, @max(times[ppfunc()]), @variance(times[ppfunc()], 3))
      # also consider: print_backtrace()
    }
+   # 聚合统计中增加ppfunc()对应的数目
    times[ppfunc()] <<< t  # (increments @count, updates @max)
 }
 
+# $1 传入的参数
+# @entry 操作符，在输入时自动保存表达式，在return探测中使用
 probe $1.return { check(time()-@entry(time())) }

@@ -25,7 +25,11 @@
 
 ## profiling/fntimes.stp - Show Functions Taking Longer Than Usual
 
-fntimes.stp脚本监控给定函数族（假定非递归）的执行时间历史记录。然后，每次（在预热间隔之后）与历史最大值进行比较。如果超过某个阈值（250%），则打印一条消息
+fntimes.stp脚本监控给定函数族（假定非递归）的执行时间历史记录。然后，每次（在预热间隔之后）与历史最大值进行比较。如果超过某个阈值（250%），则打印一条消息。
+
+## profiling/linetimes.stp - Show Time Spent on Each Line of a Function
+linetimes.stp脚本有两个参数:在哪里找到函数和函数名。linetimes.stp将检测函数中的每一行。
+它将打印出函数调用的次数、每行花费的平均和最大时间的表，以及脚本退出时的控制流信息
 
 
 # tapeset
