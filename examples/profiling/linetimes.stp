@@ -13,9 +13,13 @@
 #
 # stap linetimes.stp kernel do_unlinkat
 
+# calls 统计聚合
 global calls, times, last_pp, region, cfg
 
+# $1传入的是在什么地方查找函数，已经查找的函数名称
+# 比如kernel.function(tcp_sendmsg)
 probe $1.function(@2).call { calls <<< 1 }
+# 函数退出时执行的内容
 probe $1.function(@2).return {
   t = gettimeofday_us()
   s = times[tid()]
@@ -40,6 +44,7 @@ probe $1.statement(@2 "@*:*") {
   last_pp[tid()] = pp()
 }
 
+# 退出时的处理，@1、@2作为参数
 probe end {
   printf("\n%s %s call count: %d\n", @1, @2, @count(calls));
   printf("\n%-58s %10s %10s\n", "region", "avg(us)", "max(us)");

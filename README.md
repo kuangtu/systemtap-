@@ -31,6 +31,10 @@ fntimes.stp脚本监控给定函数族（假定非递归）的执行时间历史
 linetimes.stp脚本有两个参数:在哪里找到函数和函数名。linetimes.stp将检测函数中的每一行。
 它将打印出函数调用的次数、每行花费的平均和最大时间的表，以及脚本退出时的控制流信息
 
+## profiling/thread-times.stp - Profile Kernel Functions
+thread-times.stp 脚本设置了基于时间的采样。每五秒钟，它就会打印出一份已排序的列表，其中包含占用 CPU 的前二十个线程，这些线程按用户时间和内核时间所占的百分比进行细分。
+
+
 
 # tapeset
 示例中包含了tapset库，对于主要的库进行说明。
